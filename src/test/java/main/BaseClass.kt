@@ -27,7 +27,7 @@ class BaseClass {
         caps.setCapability(MobileCapabilityType.PLATFORM_NAME,"Android") //название платформы
         caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, "11") // версия ОС
         caps.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel API 30") // имя устройства
-        caps.setCapability(MobileCapabilityType.NO_RESET,true) //не сбрасывать приложение в 0 при новом запуске
+        //caps.setCapability(MobileCapabilityType.NO_RESET,true) //не сбрасывать приложение в 0 при новом запуске
         caps.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,"7200")
         caps.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, "ru.sportmaster.app.handh.dev")
         caps.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, "ru.sportmaster.app.presentation.start.StartActivity")
@@ -35,7 +35,7 @@ class BaseClass {
         // caps.setCapability(MobileCapabilityType.UDID,"")
 
         driver = AndroidDriver(url,caps) // установка драйвера и приложения на Android device
-        driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS)
+        driver.manage().timeouts().implicitlyWait(13,TimeUnit.SECONDS)
     }
 
     @AfterSuite
@@ -48,13 +48,12 @@ class BaseClass {
     fun testOne(){
         TimeUnit.SECONDS.sleep(1)
         try {
-            var element: MobileElement = driver.findElement(MobileBy.xpath("1/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.widget.ImageButton")) //создаем объект //производим поиск элемента
+            var element: MobileElement = driver.findElement(MobileBy.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.widget.ImageButton")) //создаем объект //производим поиск элемента
             element.click() //клик по элементу
             println("клик прошел успешно")
         } catch (e:org.openqa.selenium.WebDriverException){
             println("элемент не найден, тест продолжается")
         }
-
 
         //ввод в поле номера телефона
         lateinit var element2: MobileElement
@@ -70,6 +69,31 @@ class BaseClass {
         lateinit var element4: MobileElement
         element4=driver.findElement(MobileBy.id("ru.sportmaster.app.handh.dev:id/pinCodeEditText"))
         element4.sendKeys("1111")
+        println("успешная авторизация")
+
+        TimeUnit.SECONDS.sleep(7)
+
+        //кнопка разрешения геопозиции
+        lateinit var element5: MobileElement
+        element5=driver.findElement(MobileBy.id("com.android.permissioncontroller:id/permission_allow_foreground_only_button"))
+        element5.click()
+        println("определение геопозиции разрешено")
+
+        TimeUnit.SECONDS.sleep(5)
+
+        //кнопка подсказки города
+        lateinit var element6: MobileElement
+        element6=driver.findElement(MobileBy.id("android:id/button1"))
+        element6.click()
+        println("выбран город из подсказки")
+
+        TimeUnit.SECONDS.sleep(5)
+
+        //кнопка личный кабинет
+        lateinit var element7: MobileElement
+        element7=driver.findElement(MobileBy.id("ru.sportmaster.app.handh.dev:id/profile_graph"))
+        element7.click()
+        println("переход в личный кабинет")
 
         TimeUnit.SECONDS.sleep(5)
     }
